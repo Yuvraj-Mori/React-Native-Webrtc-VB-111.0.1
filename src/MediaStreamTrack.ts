@@ -4,7 +4,7 @@ import { NativeModules } from 'react-native';
 
 import { addListener, removeListener } from './EventEmitter';
 import Logger from './Logger';
-import { deepClone } from './RTCUtil';
+import { assetFileToUri, deepClone } from './RTCUtil';
 
 const log = new Logger('pc');
 const { WebRTCModule } = NativeModules;
@@ -133,6 +133,49 @@ class MediaStreamTrack extends defineCustomEventTarget(...MEDIA_STREAM_TRACK_EVE
         }
 
         WebRTCModule.mediaStreamTrackSetVolume(this.remote ? this._peerConnectionId : -1, this.id, volume);
+    }
+
+    _changeVBStatus(status: boolean) {
+        if (this.remote) {
+            throw new Error('Not implemented for remote tracks');
+        }
+        if (this.kind !== 'video') {
+            throw new Error('Only implemented for video tracks');
+        }
+        WebRTCModule.mediaStreamTrackChangeVbStatus(this.id, status);
+    }
+
+    _changeVBImage(imgRequire: any) {
+        if (this.remote) {
+            throw new Error('Not implemented for remote tracks');
+        }
+        if (this.kind !== 'video') {
+            throw new Error('Only implemented for video tracks');
+        }
+        let vbImageUri = assetFileToUri(imgRequire);
+        console.log("Change VB Image Uri", vbImageUri);
+        WebRTCModule.mediaStreamTrackChangeVbImageUri(this.id, vbImageUri);
+    }
+
+    _changeVBFrameSkip(vbFrameSkip: number) {
+        if (this.remote) {
+            throw new Error('Not implemented for remote tracks');
+        }
+        if (this.kind !== 'video') {
+            throw new Error('Only implemented for video tracks');
+        }
+        WebRTCModule.mediaStreamTrackChangeVbFrameSkip(this.id, vbFrameSkip);
+    }
+
+    // here blur value defined blur radius
+    _changeVBBlurValue(blurValue: number) {
+        if (this.remote) {
+            throw new Error('Not implemented for remote tracks');
+        }
+        if (this.kind !== 'video') {
+            throw new Error('Only implemented for video tracks');
+        }
+        WebRTCModule.mediaStreamTrackChangeVbBlurValue(this.id, blurValue);
     }
 
     applyConstraints(): never {

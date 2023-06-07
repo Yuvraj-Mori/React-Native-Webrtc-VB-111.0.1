@@ -1,4 +1,3 @@
-
 #import "VideoCaptureController.h"
 
 #import <React/RCTLog.h>
@@ -14,6 +13,7 @@
 @property(nonatomic, assign) int width;
 @property(nonatomic, assign) int height;
 @property(nonatomic, assign) int frameRate;
+@property(nonatomic, assign) BOOL vb;
 
 @end
 
@@ -33,6 +33,11 @@
         self.height = [constraints[@"height"] intValue];
         self.frameRate = [constraints[@"frameRate"] intValue];
 
+        //Rutime VB Start or Image Applay Set VB Always True
+        if(constraints[@"vb"]) {
+            self.vb = YES;
+        }
+        
         id facingMode = constraints[@"facingMode"];
 
         if (facingMode && [facingMode isKindOfClass:[NSString class]]) {
@@ -250,3 +255,4 @@
 }
 
 @end
+

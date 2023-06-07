@@ -1,24 +1,30 @@
 {
-  "name": "react-native-webrtc",
-  "version": "111.0.1",
-  "repository": {
+  "_from": "github:Yuvraj-Mori/React-Native-Webrtc-VB-111.0.1#ios-vb",
+  "_id": "react-native-webrtc@111.0.1",
+  "_inBundle": false,
+  "_integrity": "",
+  "_location": "/react-native-webrtc",
+  "_phantomChildren": {},
+  "_requested": {
     "type": "git",
-    "url": "git+https://github.com/react-native-webrtc/react-native-webrtc.git"
+    "raw": "react-native-webrtc@github:Yuvraj-Mori/React-Native-Webrtc-VB-111.0.1#ios-vb",
+    "name": "react-native-webrtc",
+    "escapedName": "react-native-webrtc",
+    "rawSpec": "github:Yuvraj-Mori/React-Native-Webrtc-VB-111.0.1#ios-vb",
+    "saveSpec": "github:Yuvraj-Mori/React-Native-Webrtc-VB-111.0.1#ios-vb",
+    "fetchSpec": null,
+    "gitCommittish": "ios-vb"
   },
-  "description": "WebRTC for React Native",
-  "license": "MIT",
-  "homepage": "https://github.com/react-native-webrtc/react-native-webrtc",
-  "keywords": [
-    "react-component",
-    "react-native",
-    "ios",
-    "android",
-    "webrtc"
+  "_requiredBy": [
+    "/"
   ],
-  "react-native": "src/index.ts",
-  "types": "lib/typescript/index.d.ts",
-  "main": "lib/commonjs/index.js",
-  "module": "lib/module/index.js",
+  "_resolved": "github:Yuvraj-Mori/React-Native-Webrtc-VB-111.0.1#c18ec0c5fc5f5e05d99d1a964dbffaa3ba44df1f",
+  "_spec": "react-native-webrtc@github:Yuvraj-Mori/React-Native-Webrtc-VB-111.0.1#ios-vb",
+  "_where": "/Users/wisedv/yuvraj-git/NewRnWebrtcVbUpgradeDemo",
+  "bugs": {
+    "url": "https://github.com/react-native-webrtc/react-native-webrtc/issues"
+  },
+  "bundleDependencies": false,
   "dependencies": {
     "adm-zip": "0.5.9",
     "base64-js": "1.5.1",
@@ -26,17 +32,8 @@
     "event-target-shim": "6.0.2",
     "tar": "6.1.11"
   },
-  "peerDependencies": {
-    "react-native": ">=0.60.0"
-  },
-  "scripts": {
-    "lint": "eslint --max-warnings 0 . && tsc --noEmit",
-    "prepare": "husky install && bob build",
-    "format": "tools/format.sh"
-  },
-  "bugs": {
-    "url": "https://github.com/react-native-webrtc/react-native-webrtc/issues"
-  },
+  "deprecated": false,
+  "description": "WebRTC for React Native",
   "devDependencies": {
     "@types/debug": "4.1.7",
     "@types/react": "17.0.40",
@@ -51,9 +48,25 @@
     "react-native-builder-bob": "0.18.2",
     "typescript": "4.6.2"
   },
+  "homepage": "https://github.com/react-native-webrtc/react-native-webrtc",
+  "keywords": [
+    "react-component",
+    "react-native",
+    "ios",
+    "android",
+    "webrtc"
+  ],
+  "license": "MIT",
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
   },
+  "main": "lib/commonjs/index.js",
+  "module": "lib/module/index.js",
+  "name": "react-native-webrtc",
+  "peerDependencies": {
+    "react-native": ">=0.60.0"
+  },
+  "react-native": "src/index.ts",
   "react-native-builder-bob": {
     "source": "src",
     "output": "lib",
@@ -62,5 +75,16 @@
       "module",
       "typescript"
     ]
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/react-native-webrtc/react-native-webrtc.git"
+  },
+  "scripts": {
+    "format": "tools/format.sh",
+    "lint": "eslint --max-warnings 0 . && tsc --noEmit",
+    "prepare": "husky install && bob build"
+  },
+  "types": "lib/typescript/index.d.ts",
+  "version": "111.0.1"
 }
