@@ -348,7 +348,7 @@ NSString * const upsideBackgroundImageUrl = @"https://i.ibb.co/mcSJZQk/upside.jp
     
     /** VB Disable to without process frame return*/
     if(self.vbStatus == NO || ((self.vbBackgroundImageUri == nil ||
-                                self.vbBackgroundImageUri.length == 0 || self.backgroundBuffer == nil ) && self.vbBlurValue == 0))
+                                self.vbBackgroundImageUri.length == 0 || self.backgroundBuffer == nil ) && self.vbBlurValue == 0) || CVPixelBufferGetPixelFormatType(pixelBufferRef) != kCVPixelFormatType_32BGRA)
     {
     
         RTC_OBJC_TYPE(RTCCVPixelBuffer) *rtcPixelBuffer =
