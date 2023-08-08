@@ -170,7 +170,7 @@ public class VirtualBackgroundVideoProcessor implements VideoProcessor {
 
                                             Paint paint = new Paint();
                                             paint.setXfermode(new PorterDuffXfermode(SRC_IN));
-                                            Bitmap newBitmap  = vbBlurValue > 0  ? fastBlur(inputFrameBitmap,1, vbBlurValue) :  scaled;
+                                            Bitmap newBitmap  = vbBlurValue > 0  ? fastBlur(inputFrameBitmap,1, vbBlurValue) :  Bitmap.createScaledBitmap(backgroundImage, mask.getWidth(), mask.getHeight(), false );
                                             canvas.drawBitmap(newBitmap, 0, 0, paint);
                                             paint.setXfermode(new PorterDuffXfermode(DST_OVER));
                                             canvas.drawBitmap(inputFrameBitmap, 0, 0, paint);
