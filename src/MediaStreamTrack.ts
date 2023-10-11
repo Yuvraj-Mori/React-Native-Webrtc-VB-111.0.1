@@ -9,7 +9,7 @@ import { assetFileToUri, deepClone } from './RTCUtil';
 const log = new Logger('pc');
 const { WebRTCModule } = NativeModules;
 
-const MEDIA_STREAM_TRACK_EVENTS = [ 'ended', 'mute', 'unmute' ];
+const MEDIA_STREAM_TRACK_EVENTS = ['ended', 'mute', 'unmute', 'audiodata'];
 
 type MediaStreamTrackState = 'live' | 'ended';
 
@@ -95,7 +95,7 @@ class MediaStreamTrack extends defineCustomEventTarget(...MEDIA_STREAM_TRACK_EVE
         WebRTCModule.mediaStreamTrackSwitchCamera(this.id);
     }
 
-    _setVideoEffect(name:string) {
+    _setVideoEffect(name: string) {
         if (this.remote) {
             throw new Error('Not implemented for remote tracks');
         }
@@ -210,6 +210,17 @@ class MediaStreamTrack extends defineCustomEventTarget(...MEDIA_STREAM_TRACK_EVE
             // @ts-ignore
             this.dispatchEvent(new Event('ended'));
         });
+
+        if (this.kind == "audio") {
+            addListener(this, 'audioRecordSamplesReady', (data: any) => {
+
+                const { audioFormat, sampleRate, channelCount, audioData } = data
+                //console.log("[MediaStreamTrack]::audioRecordSamplesReady() ->",{audioFormat,sampleRate, channelCount})
+
+                // @ts-ignore
+                this.dispatchEvent(new RTCAudioDataEvent('audiodata', new RTCAudioData(sampleRate, channelCount, audioFormat, audioData)));
+            });
+        }
     }
 
     release(): void {
@@ -223,3 +234,27 @@ class MediaStreamTrack extends defineCustomEventTarget(...MEDIA_STREAM_TRACK_EVE
 }
 
 export default MediaStreamTrack;
+
+export class RTCAudioData {
+    audioFormat: number;
+    channelCount: number;
+    sampleRate: number;
+    audioData: any;
+
+    constructor(sampleRate: number = 0, channelCount: number = 0, audioFormat = 0, audioData = null) {
+        this.audioData = audioData;
+        this.sampleRate = sampleRate;
+        this.channelCount = channelCount;
+        this.audioFormat = audioFormat;
+    }
+}
+
+export class RTCAudioDataEvent {
+    type: string;
+    data: RTCAudioData | null;
+    constructor(type, data) {
+        this.type = type.toString();
+        this.data = data ?? null;
+    }
+}
+

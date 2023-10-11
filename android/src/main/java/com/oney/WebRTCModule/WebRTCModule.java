@@ -2,6 +2,7 @@ package com.oney.WebRTCModule;
 
 import android.util.Log;
 import android.util.SparseArray;
+import android.util.Base64;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +19,7 @@ import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.oney.WebRTCModule.webrtcutils.H264AndSoftwareVideoDecoderFactory;
@@ -88,7 +90,13 @@ public class WebRTCModule extends ReactContextBaseJavaModule {
         }
 
         if (adm == null) {
-            adm = JavaAudioDeviceModule.builder(reactContext).setEnableVolumeLogger(false).createAudioDeviceModule();
+             adm = JavaAudioDeviceModule.builder(reactContext).setEnableVolumeLogger(false).setSamplesReadyCallback(new JavaAudioDeviceModule.SamplesReadyCallback() {
+                @Override
+                public void onWebRtcAudioRecordSamplesReady(JavaAudioDeviceModule.AudioSamples audioSamples) {
+                    Log.d(TAG, "onWebRtcAudioRecordSamplesReady: " + String.valueOf(audioSamples.getData().length));
+                    handleWebRtcAudioRecordSamplesReady(audioSamples);
+                }
+            }).createAudioDeviceModule();
         }
 
         Log.d(TAG, "Using video encoder factory: " + encoderFactory.getClass().getCanonicalName());
@@ -116,6 +124,49 @@ public class WebRTCModule extends ReactContextBaseJavaModule {
     private PeerConnection getPeerConnection(int id) {
         PeerConnectionObserver pco = mPeerConnectionObservers.get(id);
         return (pco == null) ? null : pco.getPeerConnection();
+    }
+
+    
+    private void handleWebRtcAudioRecordSamplesReady(JavaAudioDeviceModule.AudioSamples audioSamples)
+    {
+        WritableMap audioSamplesMap =  getAudioSamplesMap(audioSamples);
+        sendEvent("audioRecordSamplesReady", audioSamplesMap);
+    }
+
+    // private WritableMap getAudioSamplesMap(JavaAudioDeviceModule.AudioSamples audioSamples)
+    // {
+
+    //     WritableMap audioSamplesMap = Arguments.createMap();
+    //     WritableArray audioDataArray = new WritableNativeArray();
+
+    //     audioSamplesMap.putInt("audioFormat", audioSamples.getAudioFormat());
+    //     audioSamplesMap.putInt("sampleRate", audioSamples.getSampleRate());
+    //     audioSamplesMap.putInt("channelCount", audioSamples.getChannelCount());
+        
+    //     int length = audioSamples.getData().length;
+    //     byte[] buffer = audioSamples.getData();
+
+    //     for(int i=0; i< length ;i++) audioDataArray.pushInt((int)buffer[i]);
+
+    //     audioSamplesMap.putArray("audioData", audioDataArray);
+
+    //     return audioSamplesMap;
+    // }
+
+    private WritableMap getAudioSamplesMap(JavaAudioDeviceModule.AudioSamples audioSamples)
+    {
+
+        WritableMap audioSamplesMap = Arguments.createMap();
+        WritableArray audioDataArray = new WritableNativeArray();
+
+        audioSamplesMap.putInt("audioFormat", audioSamples.getAudioFormat());
+        audioSamplesMap.putInt("sampleRate", audioSamples.getSampleRate());
+        audioSamplesMap.putInt("channelCount", audioSamples.getChannelCount());
+        
+        String audioData = Base64.encodeToString(audioSamples.getData(), Base64.NO_WRAP);
+        audioSamplesMap.putString("audioData", audioData);
+
+        return audioSamplesMap;
     }
 
     void sendEvent(String eventName, @Nullable ReadableMap params) {
