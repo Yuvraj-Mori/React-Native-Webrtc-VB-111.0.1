@@ -258,8 +258,9 @@ NSString * const upsideBackgroundImageUrl = @"https://i.ibb.co/mcSJZQk/upside.jp
     if (!tmpImage) {
         return nil;
     }
-    
-    UIImage *image =  [UIImage imageWithCGImage:tmpImage.CGImage scale:tmpImage.scale orientation:UIImageOrientationLeft];
+    // NSLog(@"Image orientation=============================== %ld", tmpImage.imageOrientation);
+    UIImage *image =  [UIImage imageWithCGImage:tmpImage.CGImage scale:tmpImage.scale orientation:tmpImage.imageOrientation == 0 ? UIImageOrientationLeftMirrored : tmpImage.imageOrientation == 3 ? UIImageOrientationDownMirrored : tmpImage.imageOrientation];
+    // NSLog(@"New Image orientation=============================== %ld", image.imageOrientation);
     
     
     // Create a new bitmap context with the desired size
