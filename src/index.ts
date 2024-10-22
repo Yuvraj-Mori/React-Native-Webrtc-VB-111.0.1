@@ -62,6 +62,7 @@ function registerGlobals(): void {
 
     global.navigator.mediaDevices.getUserMedia = mediaDevices.getUserMedia.bind(mediaDevices);
     global.navigator.mediaDevices.getDisplayMedia = mediaDevices.getDisplayMedia.bind(mediaDevices);
+    global.navigator.mediaDevices.stopDisplayMediaForeground = mediaDevices.stopDisplayMediaForeground.bind(mediaDevices);
     global.navigator.mediaDevices.enumerateDevices = mediaDevices.enumerateDevices.bind(mediaDevices);
 
     global.RTCIceCandidate = RTCIceCandidate;

@@ -701,6 +701,11 @@ public class WebRTCModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void stopDisplayMediaForeground() {
+        ThreadUtils.runOnExecutor(() -> getUserMediaImpl.stopDisplayMediaForeground());
+    }
+
+    @ReactMethod
     public void getUserMedia(ReadableMap constraints, Callback successCallback, Callback errorCallback) {
         ThreadUtils.runOnExecutor(() -> getUserMediaImpl.getUserMedia(constraints, successCallback, errorCallback));
     }

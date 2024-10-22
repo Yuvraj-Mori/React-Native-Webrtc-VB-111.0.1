@@ -28,6 +28,10 @@ class MediaDevices extends defineCustomEventTarget(...MEDIA_DEVICES_EVENTS) {
         return getDisplayMedia();
     }
 
+    stopDisplayMediaForeground() {
+        return new Promise(resolve => WebRTCModule.stopDisplayMediaForeground());
+    }
+
     /**
      * W3C "Media Capture and Streams" compatible {@code getUserMedia}
      * implementation.

@@ -78,6 +78,7 @@ class GetUserMediaImpl {
             cameraEnumerator = new Camera1Enumerator(false);
         }
 
+        GetUserMediaImpl that = this;
         reactContext.addActivityEventListener(new BaseActivityEventListener() {
             @Override
             public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
@@ -86,6 +87,7 @@ class GetUserMediaImpl {
                     if (resultCode != Activity.RESULT_OK) {
                         displayMediaPromise.reject("DOMException", "NotAllowedError");
                         displayMediaPromise = null;
+                        that.stopDisplayMediaForeground();
                         return;
                     }
 
@@ -285,17 +287,27 @@ class GetUserMediaImpl {
                         Context.MEDIA_PROJECTION_SERVICE);
 
         if (mediaProjectionManager != null) {
+            ReactApplicationContext thatReactContext = this.reactContext;
             UiThreadUtil.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     currentActivity.startActivityForResult(
                             mediaProjectionManager.createScreenCaptureIntent(), PERMISSION_REQUEST_CODE);
+                
+                    Intent screenShareForegroundServiceIntent = new Intent(thatReactContext, BozuMeetingSSForegroundService.class);
+                    thatReactContext.startService(screenShareForegroundServiceIntent);
                 }
             });
 
         } else {
             promise.reject(new RuntimeException("MediaProjectionManager is null."));
         }
+    }
+
+    void stopDisplayMediaForeground() {
+        Intent screenShareForegroundServiceIntent = new Intent(this.reactContext, BozuMeetingSSForegroundService.class);
+        this.reactContext.stopService(screenShareForegroundServiceIntent);
+        return;
     }
 
     private void createScreenStream() {
